@@ -63,7 +63,26 @@ public class XLogHelper {
 
 	private static XFactory xesFactory = new XFactoryNaiveImpl();
 	private static XExtensionManager xesExtensionManager = XExtensionManager.instance();
-
+	
+	public static XLog mergeEventsWithSameName(XLog log, boolean hasCompleteEvents) {
+		XLog newLog = generateNewXLog(getName(log));
+		for(XTrace trace : log) {
+			XTrace newTrace = insertTrace(newLog, getName(trace));
+			int increment = (hasCompleteEvents)? 2 : 1;
+			for(int i = 0; i < trace.size(); i += increment) {
+				XEvent current = trace.get(i);
+				newTrace.add(current);
+				int j = i + increment;
+				while (j < trace.size() && getName(current).equals(getName(trace.get(j)))) {
+					j += increment;
+				}
+				newTrace.add(trace.get(j - 1));
+				i = j - increment;
+			}
+		}
+		return newLog;
+	}
+	
 	/**
 	 * This method generates a new {@link XLog} and returns it. By default,
 	 * some of the standard extensions are registered, specifically:
