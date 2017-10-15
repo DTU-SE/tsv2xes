@@ -64,6 +64,13 @@ public class XLogHelper {
 	private static XFactory xesFactory = new XFactoryNaiveImpl();
 	private static XExtensionManager xesExtensionManager = XExtensionManager.instance();
 	
+	/**
+	 * This method merges contiguous events which are referring to the same activity.
+	 * 
+	 * @param log the input log
+	 * @param hasCompleteEvents whether the log has start/complete events or just start
+	 * @return the log with the contiguous event merged
+	 */
 	public static XLog mergeEventsWithSameName(XLog log, boolean hasCompleteEvents) {
 		XLog newLog = generateNewXLog(getName(log));
 		for(XTrace trace : log) {
