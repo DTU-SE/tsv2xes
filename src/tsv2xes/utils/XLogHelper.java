@@ -1,6 +1,7 @@
 package tsv2xes.utils;
 
 
+import java.util.Comparator;
 import java.util.Date;
 
 import org.deckfour.xes.extension.XExtensionManager;
@@ -63,6 +64,24 @@ public class XLogHelper {
 
 	private static XFactory xesFactory = new XFactoryNaiveImpl();
 	private static XExtensionManager xesExtensionManager = XExtensionManager.instance();
+	
+	/**
+	 * This method sorts all the events in the traces of the log with respect to their timestamp, in increasing order.
+	 * 
+	 * @param log
+	 */
+	public static void sortXLog(XLog log) {
+		for (XTrace trace : log) {
+			trace.sort(new Comparator<XEvent>() {
+				@Override
+				public int compare(XEvent e1, XEvent e2) {
+					XAttributeTimestamp e1Time = (XAttributeTimestamp) e1.getAttributes().get("time:timestamp");
+					XAttributeTimestamp e2Time = (XAttributeTimestamp) e1.getAttributes().get("time:timestamp");
+					return e1Time.getValue().compareTo(e2Time.getValue());
+				}
+			});
+		}
+	}
 	
 	/**
 	 * This method merges contiguous events which are referring to the same activity.

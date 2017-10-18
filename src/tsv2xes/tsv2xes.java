@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class tsv2xes {
 
 	public static void main(String[] args) throws IOException, ParseException {
 		
-		File path = new File("C:\\Users\\andbur\\OneDrive - Danmarks Tekniske Universitet\\uni\\publishing\\papers\\journals\\2017-sosym\\data\\AOIs\\q2\\");
+		File path = new File("C:\\Users\\andbur\\OneDrive - Danmarks Tekniske Universitet\\uni\\publishing\\papers\\journals\\2017-sosym\\data\\AOIs\\q4\\");
 		
 		for(File inFile : path.listFiles()) {
 			if (!inFile.getName().endsWith(".tsv")) {
@@ -117,6 +118,9 @@ public class tsv2xes {
 				
 			}
 			parser.close();
+			
+			XLogHelper.sortXLog(intermediateLogGraph);
+			XLogHelper.sortXLog(intermediateLogQuadrants);
 			
 			System.out.println("   > dumping xes file");
 			// export quadrant log
